@@ -1,7 +1,7 @@
 {
   "name": "@tszip/resolve-imports",
   "author": "Christian Lewis <ctj.lewis@icloud.com>",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "license": "MIT",
   "module": "./dist/index.mjs",
   "exports": {
