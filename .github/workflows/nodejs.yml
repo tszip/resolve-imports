@@ -1,0 +1,59 @@
+name: Node CI
+
+on:
+  push:
+    branches:
+      - master
+      - esm-only
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  lint-and-dedupe:
+    runs-on: ubuntu-latest
+
+    name: Lint & Deduplicate deps on Node 14.x and ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Use Node 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Install deps and build (with cache)
+        uses: bahmutov/npm-install@v1
+
+      - name: Lint codebase
+        run: yarn lint:post-build
+
+      - name: Deduplicate dependencies
+        run: yarn deduplicate:check
+
+  test:
+    name: Test on Node ${{ matrix.node }} and ${{ matrix.os }}
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node: ['14.x']
+        os: [
+          ubuntu-latest,
+          macOS-latest,
+          # windows-latest,
+        ]
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Use Node ${{ matrix.node }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install deps and build (with cache)
+        uses: bahmutov/npm-install@v1
+
+      - name: Test package
+        run: yarn test
