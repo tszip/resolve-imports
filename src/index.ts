@@ -1,14 +1,14 @@
-import { existsSync, readFileSync } from 'fs';
+import { readFile } from 'fs/promises';
 import { dirname, extname, isAbsolute, relative } from 'path';
 import { resolve as resolveExports } from 'resolve.exports';
 import {
   importPattern,
   getPackageJson,
   renameExtension,
+  exists,
 } from './utils/filesystem';
 import { createRequire } from 'module';
 
-import fs from 'fs-extra';
 const require = createRequire(import.meta.url);
 
 /**
@@ -24,11 +24,12 @@ export const resolveImports = (opts: any) => {
   return {
     name: 'Resolve final runtime imports to files',
     renderChunk: async (code: string, chunk: any) => {
+      console.time(`resolveImports ${chunk.facadeModuleId}`);
       /**
        * Iterate over imports and rewrite all import sources to entry
        * points.
        */
-      for (let chunkImport of chunk.imports) {
+      for await (let chunkImport of chunk.imports) {
         /**
          * If the import already has a file extension, do not touch.
          */
@@ -68,7 +69,7 @@ export const resolveImports = (opts: any) => {
          */
         for (const fileExtension of fileExtensions) {
           const withExtension = absEntryWithoutExtension + fileExtension;
-          if (fs.pathExistsSync(withExtension)) {
+          if (await exists(withExtension)) {
             absEntryPoint = withExtension;
             break;
           }
@@ -86,12 +87,12 @@ export const resolveImports = (opts: any) => {
          * Crawl package.json.
          */
         const packageJsonPath = getPackageJson(absEntryPoint);
-        if (packageJsonPath && existsSync(packageJsonPath)) {
+        if (packageJsonPath && await exists(packageJsonPath)) {
           /**
            * Check if there's `exports` package.json logic. if there is, it
            * controls the flow.
            */
-          const packageJsonContent = readFileSync(packageJsonPath, 'utf-8');
+          const packageJsonContent = await readFile(packageJsonPath, 'utf-8');
           const packageJson = JSON.parse(packageJsonContent);
           const exportsFieldResolution = resolveExports(
             packageJson,
@@ -150,6 +151,8 @@ export const resolveImports = (opts: any) => {
         }
       }
 
+      console.timeEnd(`resolveImports ${chunk.facadeModuleId}`);
+
       return {
         code,
         map: null,
@@ -157,5 +160,3 @@ export const resolveImports = (opts: any) => {
     },
   };
 };
-
-export * from './utils/filesystem';

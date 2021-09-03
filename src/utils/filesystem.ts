@@ -1,4 +1,14 @@
+import { stat } from 'fs/promises';
 import { extname, resolve, sep } from 'path';
+
+export const exists = async (file: string) => {
+  try {
+    await stat(file);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 
 /**
  * Get the package.json for a given absolute entry point.
