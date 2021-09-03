@@ -1,8 +1,7 @@
 import { existsSync, readFileSync } from 'fs';
 import { dirname, extname, isAbsolute, relative } from 'path';
 import { resolve as resolveExports } from 'resolve.exports';
-import { getPackageJson, renameExtension } from './utils/filesystem';
-import { importPattern } from './utils/importPattern';
+import { importPattern, getPackageJson, renameExtension } from './utils/filesystem';
 import { createRequire } from 'module';
 
 import fs from 'fs-extra';
@@ -137,3 +136,5 @@ export const resolveImports = (opts: any) => {
     },
   };
 };
+
+export * from './utils/filesystem';

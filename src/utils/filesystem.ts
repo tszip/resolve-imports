@@ -25,3 +25,13 @@ export const renameExtension = (file: string, dotExtension: string) => {
   const oldExt = extname(file);
   return file.replace(new RegExp(`\\${oldExt}\$`), dotExtension);
 };
+
+/**
+ * A crude RegExp to match the `from 'import-source'` part of import statements,
+ * or a require(...) call.
+ */
+export const importPattern = (importSource: string) =>
+new RegExp(
+  `(from|require\\(|import)\\s*['"]${importSource.replace('.', '\\.')}['"]`,
+  'g'
+);
