@@ -29,7 +29,15 @@ export const resolveImports = (opts: any) => {
          * If the import already has a file extension, do not touch.
          */
         if (extname(chunkImport)) continue;
-        let absEntryPoint = require.resolve(chunkImport);
+        /**
+         * Otherwise, resolve the import relative to the compiled entry point.
+         */
+        let absEntryPoint = require.resolve(
+          chunkImport,
+          {
+            paths: [chunk.facadeModuleId],
+          },
+        );
         /**
          * The absolute location of the module entry point.
          * `require.resolve` logic can be used to resolve the "vanilla"
