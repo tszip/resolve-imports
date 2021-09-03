@@ -3,7 +3,7 @@ import { extname, resolve, sep } from 'path';
 /**
  * Get the package.json for a given absolute entry point.
  */
- export const getPackageJson = (absPath: string) => {
+export const getPackageJson = (absPath: string) => {
   const parts = absPath.split('node_modules');
   const rootPath = parts[0];
 
@@ -31,7 +31,7 @@ export const renameExtension = (file: string, dotExtension: string) => {
  * or a require(...) call.
  */
 export const importPattern = (importSource: string) =>
-new RegExp(
-  `(from|require\\(|import)\\s*['"]${importSource.replace('.', '\\.')}['"]`,
-  'g'
-);
+  new RegExp(
+    `(from|require\\(|import)\\s*['"]${importSource.replace('.', '\\.')}['"]`,
+    'g',
+  );

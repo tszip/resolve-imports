@@ -1,7 +1,11 @@
 import { existsSync, readFileSync } from 'fs';
 import { dirname, extname, isAbsolute, relative } from 'path';
 import { resolve as resolveExports } from 'resolve.exports';
-import { importPattern, getPackageJson, renameExtension } from './utils/filesystem';
+import {
+  importPattern,
+  getPackageJson,
+  renameExtension,
+} from './utils/filesystem';
 import { createRequire } from 'module';
 
 import fs from 'fs-extra';
@@ -39,14 +43,11 @@ export const resolveImports = (opts: any) => {
          */
         let absEntryPoint;
         try {
-          absEntryPoint = require.resolve(
-            chunkImport,
-            {
-              paths: [dirname(chunk.facadeModuleId)],
-            },
-          );
+          absEntryPoint = require.resolve(chunkImport, {
+            paths: [dirname(chunk.facadeModuleId)],
+          });
         } catch (error) {
-          console.log({ chunkImport }, dirname(chunk.facadeModuleId))
+          console.log({ chunkImport }, dirname(chunk.facadeModuleId));
           console.log(error);
           continue;
         }
@@ -59,7 +60,7 @@ export const resolveImports = (opts: any) => {
         const originalFileExt = extname(chunkImport);
         const absEntryWithoutExtension = absEntryPoint.replace(
           originalFileExt,
-          ''
+          '',
         );
         /**
          * Try to resolve ESM/CJS-specific extensions over .js when bundling
@@ -94,7 +95,7 @@ export const resolveImports = (opts: any) => {
           const packageJson = JSON.parse(packageJsonContent);
           const exportsFieldResolution = resolveExports(
             packageJson,
-            chunkImport
+            chunkImport,
           );
           /**
            * If there is `exports` logic that resolves this import, do not
@@ -103,7 +104,7 @@ export const resolveImports = (opts: any) => {
           if (exportsFieldResolution) continue;
           importToReplace = chunkImport;
           importReplacement = absEntryPoint.slice(
-            absEntryPoint.indexOf(chunkImport)
+            absEntryPoint.indexOf(chunkImport),
           );
         } else {
           /**
