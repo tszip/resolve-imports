@@ -24,20 +24,32 @@ export const resolveImports = (opts: any) => {
        * Iterate over imports and rewrite all import sources to entry
        * points.
        */
-      for (const chunkImport of chunk.imports) {
+      for (let chunkImport of chunk.imports) {
         /**
          * If the import already has a file extension, do not touch.
          */
         if (extname(chunkImport)) continue;
         /**
+         * Coerce require('.') -> require('./'), ../.. -> ../../, etc for
+         * compatibility with the require.resolve() algorithm.
+         */
+        if (chunkImport.endsWith('.')) chunkImport += '/';
+        /**
          * Otherwise, resolve the import relative to the compiled entry point.
          */
-        let absEntryPoint = require.resolve(
-          chunkImport,
-          {
-            paths: [chunk.facadeModuleId],
-          },
-        );
+        let absEntryPoint;
+        try {
+          absEntryPoint = require.resolve(
+            chunkImport,
+            {
+              paths: [dirname(chunk.facadeModuleId)],
+            },
+          );
+        } catch (error) {
+          console.log({ chunkImport }, dirname(chunk.facadeModuleId))
+          console.log(error);
+          continue;
+        }
         /**
          * The absolute location of the module entry point.
          * `require.resolve` logic can be used to resolve the "vanilla"
