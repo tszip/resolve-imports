@@ -1,13 +1,14 @@
 {
   "name": "@tszip/resolve-imports",
   "author": "Christian Lewis <ctj.lewis@icloud.com>",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "license": "MIT",
   "module": "./dist/index.mjs",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
     }
   },
   "typings": "dist/index.d.ts",
