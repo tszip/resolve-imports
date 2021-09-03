@@ -1,5 +1,5 @@
 {
-  "name": "@tszip/rollup-plugin-resolve-imports",
+  "name": "@tszip/resolve-imports",
   "author": "Christian Lewis <ctj.lewis@icloud.com>",
   "version": "0.1.0",
   "license": "MIT",
