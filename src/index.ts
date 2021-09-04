@@ -18,7 +18,7 @@ const require = createRequire(import.meta.url);
  * 'react/jsx-runtime` when react/jsx-runtime isn't a valid import
  * source:  react/jsx-runtime.js *is*.
  */
-export const resolveImports = (opts: any) => {
+export const resolveImports = () => {
   const fileExtensions = ['.mjs', '.js', '.jsx', '.cjs'];
 
   return {
@@ -30,6 +30,8 @@ export const resolveImports = (opts: any) => {
        * points.
        */
       for (let chunkImport of chunk.imports) {
+        const input = chunk.facadeModuleId;
+        const baseDir = dirname(input);
         /**
          * If the import already has a file extension, do not touch.
          */
@@ -45,10 +47,10 @@ export const resolveImports = (opts: any) => {
         let absEntryPoint;
         try {
           absEntryPoint = require.resolve(chunkImport, {
-            paths: [dirname(chunk.facadeModuleId)],
+            paths: [baseDir],
           });
         } catch (error) {
-          console.log({ chunkImport }, dirname(chunk.facadeModuleId));
+          console.log({ chunkImport }, baseDir);
           console.log(error);
           continue;
         }
@@ -117,7 +119,6 @@ export const resolveImports = (opts: any) => {
            * Otherwise, this is a relative import specified absolutely by
            * Rollup.
            */
-          const baseDir = dirname(opts.input);
           let relativeEntry = relative(baseDir, absEntryPoint);
           if (!relativeEntry.startsWith('.')) {
             relativeEntry = './' + relativeEntry;
