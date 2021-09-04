@@ -24,12 +24,12 @@ export const resolveImports = (opts: any) => {
   return {
     name: 'Resolve final runtime imports to files',
     renderChunk: async (code: string, chunk: any) => {
-      console.time(`resolveImports ${chunk.facadeModuleId}`);
+      // console.time(`resolveImports ${chunk.facadeModuleId}`);
       /**
        * Iterate over imports and rewrite all import sources to entry
        * points.
        */
-      for await (let chunkImport of chunk.imports) {
+      for (let chunkImport of chunk.imports) {
         /**
          * If the import already has a file extension, do not touch.
          */
@@ -130,7 +130,7 @@ export const resolveImports = (opts: any) => {
           if (importToReplace.endsWith('/index')) {
             importToReplace = importToReplace.slice(0, -'/index'.length);
           }
-          importReplacement = `${relativeImportNoExt}.mjs`;
+          importReplacement = `${relativeImportNoExt}.js`;
           // console.log(opts.input, { baseDir, relativeImportNoExt });
           // console.log({ importToReplace, importReplacement });
           // console.log(opts.input, {
@@ -151,7 +151,7 @@ export const resolveImports = (opts: any) => {
         }
       }
 
-      console.timeEnd(`resolveImports ${chunk.facadeModuleId}`);
+      // console.timeEnd(`resolveImports ${chunk.facadeModuleId}`);
 
       return {
         code,
