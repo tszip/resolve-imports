@@ -1,3 +1,5 @@
+import '@tszip/esm-require';
+
 import { readFile } from 'fs/promises';
 import { dirname, extname, isAbsolute, relative } from 'path';
 import { resolve as resolveExports } from 'resolve.exports';
@@ -7,9 +9,6 @@ import {
   renameExtension,
   exists,
 } from './utils/filesystem';
-
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
 
 /**
  * Resolve every relative import in output to their entry points.
