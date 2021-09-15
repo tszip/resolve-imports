@@ -1,14 +1,15 @@
 import '@tszip/esm-require';
 
-import { readFile } from 'fs/promises';
-import { dirname, extname, isAbsolute, relative } from 'path';
-import { resolve as resolveExports } from 'resolve.exports';
 import {
-  importPattern,
-  getPackageJson,
-  renameExtension,
   exists,
+  getPackageJson,
+  importPattern,
+  renameExtension,
 } from './utils/filesystem';
+
+import { dirname, extname, isAbsolute, join, relative } from 'path';
+import { readFile } from 'fs/promises';
+import { resolve as resolveExports } from 'resolve.exports';
 
 /**
  * Resolve every relative import in output to their entry points.
@@ -49,8 +50,11 @@ export const resolveImports = () => {
             paths: [baseDir],
           });
         } catch (error) {
-          console.log({ chunkImport }, baseDir);
-          console.log(error);
+          console.error(
+            'Error! Please report this: https://github.com/tszip/tszip/issues',
+            { chunkImport, baseDir },
+          );
+          console.error(error);
           continue;
         }
         /**
@@ -86,9 +90,10 @@ export const resolveImports = () => {
         let importReplacement;
         /**
          * Crawl package.json.
+         * @todo Do ASAP to avoid crawling if possible.
          */
         const packageJsonPath = getPackageJson(absEntryPoint);
-        if (packageJsonPath && await exists(packageJsonPath)) {
+        if (packageJsonPath && (await exists(packageJsonPath))) {
           /**
            * Check if there's `exports` package.json logic. if there is, it
            * controls the flow.
@@ -104,10 +109,15 @@ export const resolveImports = () => {
            * rewrite it.
            */
           if (exportsFieldResolution) continue;
-          importToReplace = chunkImport;
-          importReplacement = absEntryPoint.slice(
-            absEntryPoint.indexOf(chunkImport),
+
+          const nodeModulesPath = join('node_modules', chunkImport);
+          const prefixLength = nodeModulesPath.length - chunkImport.length;
+          const relativeFromNodeModules = absEntryPoint.slice(
+            absEntryPoint.lastIndexOf(nodeModulesPath) + prefixLength,
           );
+
+          importToReplace = chunkImport;
+          importReplacement = relativeFromNodeModules;
         } else {
           /**
            * If package.json not found, bail if the path is relative (implies
@@ -130,15 +140,14 @@ export const resolveImports = () => {
           if (importToReplace.endsWith('/index')) {
             importToReplace = importToReplace.slice(0, -'/index'.length);
           }
+          /**
+           * Finally, resolve to .js entry point if CJS/MJS matches not found.
+           */
           importReplacement = `${relativeImportNoExt}.js`;
-          // console.log(opts.input, { baseDir, relativeImportNoExt });
-          // console.log({ importToReplace, importReplacement });
-          // console.log(opts.input, {
-          //   absEntryPoint,
-          //   importToReplace,
-          //   importReplacement,
-          // });
         }
+        /**
+         * If there's no match, continue.
+         */
         if (!importToReplace || !importReplacement) continue;
         /**
          * Read the matched import/require statements and replace them.
