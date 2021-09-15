@@ -1,5 +1,5 @@
-import { stat } from 'fs/promises';
 import { extname, resolve, sep } from 'path';
+import { stat } from 'fs/promises';
 
 export const exists = async (file: string) => {
   try {
@@ -8,7 +8,7 @@ export const exists = async (file: string) => {
   } catch (e) {
     return false;
   }
-}
+};
 
 /**
  * Get the package.json for a given absolute entry point.
@@ -33,7 +33,7 @@ export const getPackageJson = (absPath: string) => {
 
 export const renameExtension = (file: string, dotExtension: string) => {
   const oldExt = extname(file);
-  return file.replace(new RegExp(`\\${oldExt}\$`), dotExtension);
+  return file.replace(new RegExp(`\\${oldExt}$`), dotExtension);
 };
 
 /**
