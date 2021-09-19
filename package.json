@@ -2,7 +2,7 @@
   "name": "@tszip/resolve-imports",
   "type": "module",
   "author": "Christian Lewis <ctj.lewis@icloud.com>",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "license": "MIT",
   "module": "./dist/index.mjs",
   "exports": {
@@ -19,7 +19,8 @@
     "node": ">=14"
   },
   "scripts": {
-    "start": "tszip watch",
+    "boot": "tsc && yarn rollup -c",
+    "dev": "tszip dev",
     "build": "tszip build",
     "test": "tszip test",
     "lint": "tszip lint"
