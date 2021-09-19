@@ -1,4 +1,4 @@
-import '@tszip/esm-require';
+import '@tszip/cjs';
 
 import {
   exists,
