@@ -10,6 +10,7 @@ import {
 import { dirname, extname, isAbsolute, join, relative } from 'path';
 import { readFile } from 'fs/promises';
 import { resolve as resolveExports } from 'resolve.exports';
+import { sep } from 'path';
 
 /**
  * Resolve every relative import in output to their entry points.
@@ -31,6 +32,7 @@ export const resolveImports = () => {
        */
       for (let chunkImport of chunk.imports) {
         const input = chunk.facadeModuleId;
+        console.log({ chunkImport });
         const baseDir = dirname(input);
         /**
          * If the import already has a file extension, do not touch.
@@ -49,6 +51,7 @@ export const resolveImports = () => {
           absEntryPoint = require.resolve(chunkImport, {
             paths: [baseDir],
           });
+          console.log({ absEntryPoint });
         } catch (error) {
           console.error(
             'Error! Please report this: https://github.com/tszip/tszip/issues',
@@ -133,7 +136,14 @@ export const resolveImports = () => {
             relativeEntry = './' + relativeEntry;
           }
           const relativeImportNoExt = renameExtension(relativeEntry, '');
-          importToReplace = relativeImportNoExt;
+          /**
+           * If this is a package import, replace the original reference.
+           */
+          if (!chunkImport.startsWith('.') && !chunkImport.startsWith(sep)) {
+            importToReplace = chunkImport;
+          } else {
+            importToReplace = relativeImportNoExt;
+          }
           /**
            * ./path/to/module/index will be in TS output as ./path/to/module.
            */
@@ -145,6 +155,7 @@ export const resolveImports = () => {
            */
           importReplacement = `${relativeImportNoExt}.js`;
         }
+        console.log({ importToReplace, importReplacement });
         /**
          * If there's no match, continue.
          */

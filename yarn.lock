@@ -1257,21 +1257,21 @@
   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.2.0.tgz#cccaab758af56761eb7bf37af6f03f326dd798ad"
   integrity sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==
 
-"@tszip/cjs@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@tszip/cjs/-/cjs-1.4.0.tgz#3ba2a550a2263ffa326bbf8d79e77b5e60d455c3"
-  integrity sha512-qZyuk4iXJc0UjXH6mAsg0iinojyotHfayC55qiWXMjLbPmdbLdEoOIPW3Txyqtx5+Tuek9lKHuZ407fwwk/B9g==
+"@tszip/cjs@^1.4.0", "@tszip/cjs@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@tszip/cjs/-/cjs-1.5.0.tgz#7f673154cda4e7db152253e816e0065aa35bfbd2"
+  integrity sha512-kD5KBfd7qIUodfmHPD3H3rp8Uaj1PCRMtGC6P6SzAyOpPal7slcAr+4Up1g3r8x0mlKOyYwR2nQr8Fryw1vM8Q==
   dependencies:
     module "^1.2.5"
     url "^0.11.0"
 
 "@tszip/resolve-imports@^2.0.0", "@tszip/resolve-imports@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@tszip/resolve-imports/-/resolve-imports-2.4.0.tgz#32d6ef822eb2acc88ce2d58a119f177792c2f8b6"
-  integrity sha512-64+QMWELRare9B3v5h/A9SUso949wrVCKpv/eYZdV9GHRHK0XwMX1FfMKv6ozMja34id30MxskPDOKp4xYrHBw==
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@tszip/resolve-imports/-/resolve-imports-2.5.0.tgz#58372bbd629a0b4912506581785b1b12fd9b0a45"
+  integrity sha512-TT/AbyTvGXdJTfGyvhsf7zVqyRuDziPqnjCuWSudQ+c8KDK+lIaXKqbHZbroHQEZ/6NWabjzTGEWR2FU4VofQw==
   dependencies:
     "@tszip/cjs" "^1.4.0"
-    "@tszip/tszip" "^1.12.0"
+    "@tszip/tszip" "^1.14.0"
     "@types/fs-extra" "^9.0.12"
     "@types/resolve" "^1.20.1"
     fs-extra "^10.0.0"
@@ -1294,7 +1294,7 @@
     rollup-plugin-preserve-shebang "^1.0.1"
     rollup-plugin-terser "^7.0.2"
 
-"@tszip/tszip@^1.12.0", "@tszip/tszip@^1.14.0":
+"@tszip/tszip@^1.14.0":
   version "1.14.0"
   resolved "https://registry.yarnpkg.com/@tszip/tszip/-/tszip-1.14.0.tgz#1929ee212c0f89295cc99ae7e0cd0504f1da474c"
   integrity sha512-g/BPAks1d7063ndtKvITjXJYMSB1O1AernZEuGZC7cMMtOtqPy7ZTF3XZilZiqbGrvgkl8JvaEUWlDRZOLGuXw==
