@@ -32,7 +32,7 @@ export const resolveImports = () => {
        */
       for (let chunkImport of chunk.imports) {
         const input = chunk.facadeModuleId;
-        console.log({ chunkImport });
+        // console.log({ chunkImport });
         const baseDir = dirname(input);
         /**
          * If the import already has a file extension, do not touch.
@@ -51,7 +51,7 @@ export const resolveImports = () => {
           absEntryPoint = require.resolve(chunkImport, {
             paths: [baseDir],
           });
-          console.log({ absEntryPoint });
+          // console.log({ absEntryPoint });
         } catch (error) {
           console.error(
             'Error! Please report this: https://github.com/tszip/tszip/issues',
@@ -155,7 +155,7 @@ export const resolveImports = () => {
            */
           importReplacement = `${relativeImportNoExt}.js`;
         }
-        console.log({ importToReplace, importReplacement });
+        // console.log({ importToReplace, importReplacement });
         /**
          * If there's no match, continue.
          */
