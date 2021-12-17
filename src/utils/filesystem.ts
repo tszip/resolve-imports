@@ -37,11 +37,19 @@ export const renameExtension = (file: string, dotExtension: string) => {
 };
 
 /**
- * A crude RegExp to match the `from 'import-source'` part of import statements,
- * or a require(...) call.
+ * Matches a complete import statement, including the import keyword, as well as
+ * dynamic imports and requires.
  */
-export const importPattern = (importSource: string) =>
-  new RegExp(
-    `(from|require\\(|import)\\s*['"]${importSource.replace('.', '\\.')}['"]`,
+export const importPattern = (importSource: string) => {
+  const exprBreak = '[^\n\r;]*';
+  const escaped = importSource.replace('.', '\\.').replace('/', '\\/');
+  const padded = `${exprBreak}["']${escaped}["']${exprBreak}`;
+
+  const importFrom = `(import${exprBreak}from)`;
+  const dynamicImport = `(import|require)${exprBreak}\\(`;
+  const exportFrom = `(export${exprBreak}from)`;
+  return new RegExp(
+    `(${importFrom}|${dynamicImport}|${exportFrom})${padded}`,
     'g',
   );
+};

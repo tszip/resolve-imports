@@ -10,6 +10,7 @@ import {
 import { dirname, extname, isAbsolute, join, relative } from 'path';
 import { readFile } from 'fs/promises';
 import { resolve as resolveExports } from 'resolve.exports';
+import { rewriteImport } from './utils/rewriteImport';
 import { sep } from 'path';
 
 /**
@@ -164,10 +165,19 @@ export const resolveImports = () => {
          * Read the matched import/require statements and replace them.
          */
         const importMatch = importPattern(importToReplace);
-        const matches = code.match(importMatch) ?? [];
-        for (const match of matches) {
-          const rewritten = match.replace(importToReplace, importReplacement);
-          code = code.replace(match, rewritten);
+        const importStatements = code.match(importMatch) ?? [];
+        for (const importStatement of importStatements) {
+          /**
+           * Rewrite import identifiers for seamless CJS support. Ignore dynamic
+           * imports.
+           */
+          const rewrittenImport = rewriteImport(
+            importStatement,
+            importToReplace,
+            importReplacement,
+          );
+          // console.log(rewrittenImport);
+          code = code.replace(importStatement, rewrittenImport);
         }
       }
 
