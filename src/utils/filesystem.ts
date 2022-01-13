@@ -1,4 +1,4 @@
-import { extname, resolve, sep } from 'path';
+import { extname, resolve } from 'path';
 import { stat } from 'fs/promises';
 
 export const exists = async (file: string) => {
@@ -18,14 +18,14 @@ export const getPackageJson = (absPath: string) => {
   const rootPath = parts[0];
 
   if (parts.length < 2) return null;
-  const moduleParts = parts[1].split(sep);
+  const moduleParts = parts[1].split('/');
 
   /**
    * node_modules/name => name
    * node_modules/@test/test => @test/test
    */
   const moduleName = moduleParts[1].startsWith('@')
-    ? moduleParts.slice(1, 3).join(sep)
+    ? moduleParts.slice(1, 3).join('/')
     : moduleParts[1];
 
   return resolve(rootPath, 'node_modules', moduleName, 'package.json');

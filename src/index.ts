@@ -10,7 +10,6 @@ import {
 import { dirname, extname, isAbsolute, join, relative } from 'path';
 import { readFile } from 'fs/promises';
 import { resolve as resolveExports } from 'resolve.exports';
-import { sep } from 'path';
 
 /**
  * Resolve every relative import in output to their entry points.
@@ -139,7 +138,7 @@ export const resolveImports = () => {
           /**
            * If this is a package import, replace the original reference.
            */
-          if (!chunkImport.startsWith('.') && !chunkImport.startsWith(sep)) {
+          if (!chunkImport.startsWith('.') && !chunkImport.startsWith('/')) {
             importToReplace = chunkImport;
           } else {
             importToReplace = relativeImportNoExt;
