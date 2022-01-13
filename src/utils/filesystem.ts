@@ -15,11 +15,13 @@ export const exists = async (file: string) => {
  */
 export const getPackageJson = (absPath: string) => {
   const parts = absPath.split('node_modules');
+
   const rootPath = parts[0];
-
   if (parts.length < 2) return null;
-  const moduleParts = parts[1].split('/');
 
+  const moduleParts = parts[1].split('/');
+  if (moduleParts.length < 2) return null;
+  
   /**
    * node_modules/name => name
    * node_modules/@test/test => @test/test
