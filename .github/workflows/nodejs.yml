@@ -32,6 +32,8 @@ jobs:
 
       - name: Install deps and build (with cache)
         uses: bahmutov/npm-install@v1
+        with:
+          install-command: yarn
 
       - name: Test package
         run: yarn test
