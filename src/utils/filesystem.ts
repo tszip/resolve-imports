@@ -33,7 +33,7 @@ export const getPackageJson = (absPath: string) => {
    * node_modules/@test/test => @test/test
    */
   const moduleName = moduleParts[1].startsWith('@')
-    ? moduleParts.slice(1, 3).join('/')
+    ? moduleParts.slice(1, 3).join(sep)
     : moduleParts[1];
 
   return resolve(rootPath, 'node_modules', moduleName, 'package.json');
