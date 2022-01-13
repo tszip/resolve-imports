@@ -1,5 +1,6 @@
 import { extname, resolve } from 'path';
 import { stat } from 'fs/promises';
+import { sep } from 'path';
 
 export const exists = async (file: string) => {
   try {
@@ -19,9 +20,14 @@ export const getPackageJson = (absPath: string) => {
   const rootPath = parts[0];
   if (parts.length < 2) return null;
 
-  const moduleParts = parts[1].split('/');
+  /**
+   * We need to use path.sep whenever parsing parts of a module from an absolute
+   * filepath, since that will vary by platform. When specifying modules in JS,
+   * we will never need path.sep, the separator is always /.
+   */
+  const moduleParts = parts[1].split(sep);
   if (moduleParts.length < 2) return null;
-  
+
   /**
    * node_modules/name => name
    * node_modules/@test/test => @test/test
